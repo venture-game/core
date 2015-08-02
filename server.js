@@ -1,10 +1,9 @@
-var app = require('../frontend/index').frontend;
-var http = require('http').Server(app);
+var client = require('../client/index').client;
+var http = require('http').Server(client);
 var io = require('socket.io')(http);
 
 io.on('connection', function(socket){
-    console.log('a user connected');
-    io.emit('event:connect', socket.id+' has connected...');
+    io.emit('event:connect', socket.id+' has connected!');
 
     socket.on('chat message', function(msg){
         console.log('message: ' + msg);
