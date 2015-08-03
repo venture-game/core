@@ -1,2 +1,1 @@
-# io
-socket.io server
+Server for Venture Game
