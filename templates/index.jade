@@ -1,0 +1,26 @@
+extends ./layout
+
+block main
+    #main
+        h1 Venture Game
+        p игровая область
+
+block status_bar
+    #status
+
+block js
+    script(src="/socket.io/socket.io.js")
+    script(src="http://code.jquery.com/jquery-1.11.1.js")
+    script(type="text/javascript").
+        var socket = io();
+        $('form').submit(function(){
+            socket.emit('chat message', $('#m').val());
+            $('#m').val('');
+            return false;
+        });
+        socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(socket.id+': '+msg));
+        });
+        socket.on('event:connect', function(msg){
+            $('#status').append($('<i>').text(msg));
+        });
