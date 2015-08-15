@@ -1,15 +1,7 @@
 extends ./layout
 
-block main
-    #main
-        h1 Venture Game
-        p игровая область
-
-block status_bar
-    #status
-
 block js
-    script(src="/socket.io/socket.io.js")
+    script(src="socket.io/socket.io.js")
     script(src="http://code.jquery.com/jquery-1.11.1.js")
     script(type="text/javascript").
         var socket = io();
