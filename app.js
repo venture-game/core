@@ -17,7 +17,4 @@ app.get('/', function (req, res) {
     res.render('index');
 });
 
-app.post('/login', function(req, res, next) {
-});
-
 module.exports.client = app;

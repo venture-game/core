@@ -13,9 +13,10 @@ html(lang="ru")
     body(ng-app="client" layout="row")
         div(flex layout="column" tabIndex="-1")
             md-toolbar.md-whiteframe-z1(layout="row")
-            md-content#content(flex layout="row" layout-align="center center"
+            md-content#content(flex layout="row" layout-align="center center" ng-controller="Main as main"
                                style="background-image:url(assets/png/city08.png); background-size: 100% auto")
-                md-content.md-whiteframe-z2(layout-padding layout="row" ng-controller="Main as main")
+                form.md-whiteframe-z2(layout-padding layout="row"
+                                      style="background: #fff" ng-if="!main.isAuthed()")
                     md-input-container
                         label="Email (обязательно)"
                         input(ng-model="main.email" type="email" required="true")
@@ -36,17 +37,16 @@ script(type='text/javascript').
            .factory('authInterceptor', authInterceptor)
            .service('user', userService)
            .service('auth', authService)
-           .constant('API', 'http://test-routes.herokuapp.com')
+           .constant('ACCOUNT_SERVICE', 'http://localhost:3001/account')
            .config(function($httpProvider) {
                 $httpProvider.interceptors.push('authInterceptor');
             })
            .controller('Main', MainCtrl)
            .config(function($mdThemingProvider, $mdIconProvider){
-
-                $mdIconProvider
-                        .defaultIconSet("./assets/svg/avatars.svg", 128)
-                        .icon("menu"       , "./assets/svg/menu.svg"        , 24)
-                        .icon("share"      , "./assets/svg/share.svg"       , 24)
+                            $mdIconProvider
+                                    .defaultIconSet("./assets/svg/avatars.svg", 128)
+                                    .icon("menu"       , "./assets/svg/menu.svg"        , 24)
+                                    .icon("share"      , "./assets/svg/share.svg"       , 24)
                         .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
                         .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
                         .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)

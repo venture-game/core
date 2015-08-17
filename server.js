@@ -4,6 +4,7 @@ var io = require('socket.io')(http);
 
 io.on('connection', function(socket){
     io.emit('event:connect', socket.id+' has connected!');
+    console.log('user connected');
 
     socket.on('chat message', function(msg){
         console.log('message: ' + msg);
