@@ -1,4 +1,6 @@
-var app = require('./app').client;
+"use strict";
+
+var app = require('./app');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -9,6 +11,13 @@ io.on('connection', function(socket){
     socket.on('chat message', function(msg){
         console.log('message: ' + msg);
         io.emit('chat message', msg);
+    });
+
+    socket.on('user logged in', function(msg) {
+        console.log('user logged in: %s', msg);
+    });
+    socket.on('user logged out', function(msg) {
+        console.log('user logged out');
     });
 
     socket.on('disconnect', function(){

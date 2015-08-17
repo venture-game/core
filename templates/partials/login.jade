@@ -1,0 +1,9 @@
+form.md-whiteframe-z2(layout-padding layout="row"
+                      style="background: #fff")
+    md-input-container
+        label="Email"
+        input(ng-model="main.email" type="email" required="true")
+    md-input-container
+        label="Пароль"
+        input(ng-model="main.password" type="password")
+    md-button.md-primary(md-no-ink ng-click="main.login()") Войти

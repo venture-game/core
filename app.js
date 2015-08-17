@@ -2,7 +2,6 @@
 
 var express = require('express'),
     app = express(),
-    seneca = require('seneca')().client(),
     path = require('path'),
     bodyParser = require('body-parser');
 
@@ -16,5 +15,9 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 app.get('/', function (req, res) {
     res.render('index');
 });
+app.get('/partials/:name', function (req, res) {
+    var name = req.params.name;
+    res.render('partials/' + name);
+});
 
-module.exports.client = app;
+module.exports = app;

@@ -1,6 +1,44 @@
 "use strict";
 
+angular.module('client', ['ngMaterial', 'ngRoute'])
+    .factory('authInterceptor', authInterceptor)
+    .service('user', userService)
+    .service('auth', authService)
+    .constant('ACCOUNT_SERVICE', 'http://localhost:3001/account')
+    .config(function($httpProvider) {
+        $httpProvider.interceptors.push('authInterceptor');
+    })
+    .controller('Main', MainCtrl)
+    .config(['$routeProvider', routes])
+    .config(function($mdThemingProvider, $mdIconProvider){
+        $mdIconProvider
+            .defaultIconSet("./assets/svg/avatars.svg", 128)
+            .icon("menu"       , "./assets/svg/menu.svg"        , 24)
+            .icon("share"      , "./assets/svg/share.svg"       , 24)
+            .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
+            .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
+            .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
+            .icon("account"    , "./assets/svg/ic_account_circle_48px.svg", 512)
+            .icon("phone"      , "./assets/svg/phone.svg"       , 512);
+
+        $mdThemingProvider.theme('default')
+            .primaryPalette('blue')
+            .accentPalette('purple');
+
+    });
+
+function routes($routeProvider) {
+    $routeProvider.
+        when('/login', {
+            templateUrl: 'partials/login.jade'
+        })
+        .when('/register', {
+            templateUrl: 'partials/register.jade'
+        })
+}
+
 function authInterceptor(ACCOUNT_SERVICE, auth) {
+
     return {
         // automatically attach Authorization header
         request: function(config) {
@@ -46,20 +84,16 @@ function userService($http, ACCOUNT_SERVICE, auth) {
 
     self.register = function(email, password) {
         return $http.post(ACCOUNT_SERVICE + '/register', {
-            username: email,
+            email: email,
             password: password
         })
     };
 
     self.login = function(email, password) {
-        $http.post(ACCOUNT_SERVICE + '/login', {
+        return $http.post(ACCOUNT_SERVICE + '/login', {
             account_id: email,
             password: password
-        }).then(function(res) {
-            if (!res.authenticated) {
-                self.register(email, password)
-            }
-        });
+        })
     };
 
     self.logout = function() {
@@ -79,14 +113,24 @@ function MainCtrl(user, auth) {
 
     self.login = function() {
         user.login(self.email, self.password)
-            .then(handleRequest, handleRequest)
+            .then(function(res) {
+                if (!res.data.account_id) {
+                    self.register(self.email, self.password)
+                } else if(res.data.account_id && !res.data.authenticated) {
+                    console.log('Auth failed')
+                } else {
+                    socket.emit('user logged in', self.email);
+                }
+            },
+            handleRequest)
     };
     self.register = function() {
         user.register(self.email, self.password)
             .then(handleRequest, handleRequest)
     };
     self.logout = function() {
-        user.logout()
+        user.logout();
+        socket.emit('user logged out');
     };
     self.isAuthed = function() {
         return auth.isAuthed ? auth.isAuthed() : false
