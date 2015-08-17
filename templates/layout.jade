@@ -10,10 +10,14 @@ html(lang="ru")
         link(rel="stylesheet" href="angular-material/angular-material.css")
         link(rel="stylesheet" href="assets/app.css")
 
-    body(ng-app="client" layout="row")
+    body(ng-app="client" layout="row" ng-controller="Main as main")
         div(flex layout="column" tabIndex="-1")
             md-toolbar.md-whiteframe-z1(layout="row")
-            md-content#content(flex layout="row" layout-align="center center" ng-controller="Main as main"
+                .md-toolbar-tools
+                    span(flex)
+                    md-button(ng-if="main.isAuthed()" ng-click="main.logout()") Выйти
+
+            md-content#content(flex layout="row" layout-align="center center"
                                style="background-image:url(assets/png/city08.png); background-size: 100% auto")
                 form.md-whiteframe-z2(layout-padding layout="row"
                                       style="background: #fff" ng-if="!main.isAuthed()")
@@ -50,6 +54,7 @@ script(type='text/javascript').
                         .icon("google_plus", "./assets/svg/google_plus.svg" , 512)
                         .icon("hangouts"   , "./assets/svg/hangouts.svg"    , 512)
                         .icon("twitter"    , "./assets/svg/twitter.svg"     , 512)
+                        .icon("account"    , "./assets/svg/ic_account_circle_48px.svg", 512)
                         .icon("phone"      , "./assets/svg/phone.svg"       , 512);
 
                 $mdThemingProvider.theme('default')

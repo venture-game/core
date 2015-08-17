@@ -1,3 +1,5 @@
+"use strict";
+
 function authInterceptor(ACCOUNT_SERVICE, auth) {
     return {
         // automatically attach Authorization header
@@ -30,6 +32,10 @@ function authService($window) {
         return $window.localStorage['jwtToken'];
     };
 
+    self.deleteToken = function() {
+        $window.localStorage.removeItem('jwtToken');
+    };
+
     self.isAuthed = function() {
         return Boolean(self.getToken());
     }
@@ -38,23 +44,26 @@ function authService($window) {
 function userService($http, ACCOUNT_SERVICE, auth) {
     var self = this;
 
-    // add authentication methods here
     self.register = function(email, password) {
-        return $http.post(ACCOUNT_SERVICE + '/auth/register', {
+        return $http.post(ACCOUNT_SERVICE + '/register', {
             username: email,
             password: password
         })
     };
 
     self.login = function(email, password) {
-        return $http.post(ACCOUNT_SERVICE + '/login', {
+        $http.post(ACCOUNT_SERVICE + '/login', {
             account_id: email,
             password: password
-        })
+        }).then(function(res) {
+            if (!res.authenticated) {
+                self.register(email, password)
+            }
+        });
     };
 
     self.logout = function() {
-        $window.localStorage.removeItem('jwtToken');
+        auth.deleteToken();
     }
 }
 
@@ -77,7 +86,7 @@ function MainCtrl(user, auth) {
             .then(handleRequest, handleRequest)
     };
     self.logout = function() {
-        auth.logout && auth.logout()
+        user.logout()
     };
     self.isAuthed = function() {
         return auth.isAuthed ? auth.isAuthed() : false
