@@ -1,8 +1,9 @@
 "use strict";
 
-var app = require('./app');
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var app = require('./app'),
+    http = require('http').Server(app),
+    io = require('socket.io')(http),
+    spawn = require('child_process').spawn;
 
 io.on('connection', function(socket){
     io.emit('event:connect', socket.id+' has connected!');
@@ -26,5 +27,8 @@ io.on('connection', function(socket){
 });
 
 http.listen(3000, function(){
-    console.log('server listening on *:3000');
+    console.log('- SERVER listening on *:3000');
+    var AS = spawn('node', ['../account_service/service.js']);
+    AS.stdout.pipe(process.stdout);
+    AS.stderr.pipe(process.stderr);
 });
