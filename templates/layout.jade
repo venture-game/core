@@ -10,12 +10,12 @@ html(lang="ru")
         link(rel="stylesheet" href="angular-material/angular-material.css")
         link(rel="stylesheet" href="assets/app.css")
 
-    body(ng-app="client" layout="row" ng-controller="Main as main")
+    body(ng-app="client" layout="row" ng-controller="User as user")
         div(flex layout="column" tabIndex="-1")
-            md-toolbar.md-whiteframe-z1(layout="row" ng-if="main.isAuthed()")
+            md-toolbar.md-whiteframe-z1(layout="row" ng-if="user.isAuthed()")
                 .md-toolbar-tools
                     span(flex)
-                    md-button(ng-click="main.logout()") Выйти
+                    md-button(ng-click="user.logout()") Выйти
 
             md-content#content(flex ng-view layout="row" layout-align="center center"
                                style="background-image:url(assets/png/city08.png); background-size: 100% auto")

@@ -8,7 +8,7 @@ angular.module('client', ['ngMaterial', 'ngRoute'])
     .config(function($httpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
     })
-    .controller('Main', MainCtrl)
+    .controller('User', user_controller)
     .config(['$routeProvider', routes])
     .config(function($mdThemingProvider, $mdIconProvider){
         $mdIconProvider
@@ -102,7 +102,7 @@ function userService($http, ACCOUNT_SERVICE, auth) {
 }
 
 // We won't touch anything in here
-function MainCtrl(user, auth) {
+function user_controller(user, auth) {
     var self = this;
 
     function handleRequest(res) {
@@ -114,9 +114,7 @@ function MainCtrl(user, auth) {
     self.login = function() {
         user.login(self.email, self.password)
             .then(function(res) {
-                if (!res.data.account_id) {
-                    self.register(self.email, self.password)
-                } else if(res.data.account_id && !res.data.authenticated) {
+                if(!res.data.authenticated) {
                     console.log('Auth failed')
                 } else {
                     socket.emit('user logged in', self.email);
