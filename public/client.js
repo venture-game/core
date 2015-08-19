@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('client', ['ngMaterial', 'ngRoute'])
+angular.module('client', ['ngMaterial', 'ngRoute', 'LocalStorageModule'])
     .factory('authInterceptor', authInterceptor)
     .service('user', userService)
     .service('auth', authService)
@@ -10,6 +10,10 @@ angular.module('client', ['ngMaterial', 'ngRoute'])
     })
     .controller('User', user_controller)
     .config(['$routeProvider', routes])
+    .config(function(localStorageServiceProvider) {
+        localStorageServiceProvider
+            .setPrefix('venture-game')
+    })
     .config(function($mdThemingProvider, $mdIconProvider){
         $mdIconProvider
             .defaultIconSet("./assets/svg/avatars.svg", 128)
@@ -27,15 +31,7 @@ angular.module('client', ['ngMaterial', 'ngRoute'])
 
     });
 
-function routes($routeProvider) {
-    $routeProvider.
-        when('/login', {
-            templateUrl: 'partials/login.jade'
-        })
-        .when('/register', {
-            templateUrl: 'partials/register.jade'
-        })
-}
+
 
 function authInterceptor(ACCOUNT_SERVICE, auth) {
 
@@ -59,19 +55,20 @@ function authInterceptor(ACCOUNT_SERVICE, auth) {
     }
 }
 
-function authService($window) {
-    var self = this;
+function authService(localStorageService) {
+    var self = this,
+        token_key = 'token';
 
     self.saveToken = function(token) {
-        $window.localStorage['jwtToken'] = token;
+        localStorageService.set(token_key, token);
     };
 
     self.getToken = function() {
-        return $window.localStorage['jwtToken'];
+        return localStorageService.get(token_key);
     };
 
     self.deleteToken = function() {
-        $window.localStorage.removeItem('jwtToken');
+        localStorageService.remove(token_key);
     };
 
     self.isAuthed = function() {
