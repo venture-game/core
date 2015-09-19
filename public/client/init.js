@@ -1,15 +1,13 @@
 "use strict";
 
-angular.module('client', ['ngMaterial', 'ngRoute', 'LocalStorageModule'])
+var client = angular.module('client', ['ngMaterial', 'ngRoute', 'LocalStorageModule'])
     .factory('authInterceptor', authInterceptor)
-    .service('user', userService)
+    .service('user_service', userService)
     .service('auth', authService)
     .constant('ACCOUNT_SERVICE', 'http://localhost:3001/account')
     .config(function($httpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
     })
-    .controller('User', user_controller)
-    .config(['$routeProvider', routes])
     .config(function(localStorageServiceProvider) {
         localStorageServiceProvider
             .setPrefix('venture-game')
@@ -38,7 +36,7 @@ function authInterceptor(ACCOUNT_SERVICE, auth) {
     return {
         // automatically attach Authorization header
         request: function(config) {
-            var token = auth.getToken();
+            var token = auth.get_token();
             if(config.url.indexOf(ACCOUNT_SERVICE) === 0 && token) {
                 config.headers.Authorization = 'Bearer ' + token;
             }
@@ -63,17 +61,13 @@ function authService(localStorageService) {
         localStorageService.set(token_key, token);
     };
 
-    self.getToken = function() {
+    self.get_token = function() {
         return localStorageService.get(token_key);
     };
 
     self.deleteToken = function() {
         localStorageService.remove(token_key);
     };
-
-    self.isAuthed = function() {
-        return Boolean(self.getToken());
-    }
 }
 
 function userService($http, ACCOUNT_SERVICE, auth) {
@@ -92,42 +86,4 @@ function userService($http, ACCOUNT_SERVICE, auth) {
             password: password
         })
     };
-
-    self.logout = function() {
-        auth.deleteToken();
-    }
-}
-
-// We won't touch anything in here
-function user_controller(user, auth) {
-    var self = this;
-
-    function handleRequest(res) {
-        var token = res.data ? res.data.token : null;
-        if(token) { console.log('JWT:', token); }
-        self.message = res.data.message;
-    }
-
-    self.login = function() {
-        user.login(self.email, self.password)
-            .then(function(res) {
-                if(!res.data.authenticated) {
-                    console.log('Auth failed')
-                } else {
-                    socket.emit('user logged in', self.email);
-                }
-            },
-            handleRequest)
-    };
-    self.register = function() {
-        user.register(self.email, self.password)
-            .then(handleRequest, handleRequest)
-    };
-    self.logout = function() {
-        user.logout();
-        socket.emit('user logged out');
-    };
-    self.isAuthed = function() {
-        return auth.isAuthed ? auth.isAuthed() : false
-    }
 }

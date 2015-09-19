@@ -1,5 +1,5 @@
 doctype html
-html(lang="ru")
+html(lang="ru", ng-app="client")
     head
         title=title
         meta(charset="utf-8")
@@ -10,9 +10,9 @@ html(lang="ru")
         link(rel="stylesheet" href="angular-material/angular-material.css")
         link(rel="stylesheet" href="assets/app.css")
 
-    body(ng-app="client" layout="row" ng-controller="User as user")
+    body(layout="row" ng-controller="User as user")
         div(flex layout="column" tabIndex="-1")
-            md-toolbar.md-whiteframe-z1(layout="row" ng-if="user.isAuthed()")
+            md-toolbar.md-whiteframe-z1(layout="row" ng-if="user.is_logged_in()")
                 .md-toolbar-tools
                     span(flex)
                     md-button(ng-click="user.logout()") Выйти
@@ -20,12 +20,15 @@ html(lang="ru")
             md-content#content(flex ng-view layout="row" layout-align="center center"
                                style="background-image:url(assets/png/city08.png); background-size: 100% auto")
 
+// load packages
 script(src="angular/angular.js")
 script(src="angular-animate/angular-animate.js")
 script(src="angular-aria/angular-aria.js")
 script(src="angular-material/angular-material.js")
 script(src="angular-route/angular-route.js")
 script(src="angular-local-storage/dist/angular-local-storage.min.js")
-script(src="routes.js")
-script(src="client.js")
+
+script(src="client/init.js")
+script(src="client/routes.js")
+script(src="client/user/controller.js")
 block js
