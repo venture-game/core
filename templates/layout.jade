@@ -15,7 +15,7 @@ html(lang="ru", ng-app="client")
             md-toolbar.md-whiteframe-z1(layout="row")
                 .md-toolbar-tools
                     span(flex)
-                    include ../public/client/user/menu.jade
+                    include ../client/user/menu.jade
             md-content#content(flex ng-view layout="row" layout-align="center center"
                                style="background-image:url(/assets/png/city08.png); background-size: 100% auto")
 
@@ -27,7 +27,7 @@ script(src="angular-material/angular-material.js")
 script(src="angular-route/angular-route.js")
 script(src="angular-local-storage/dist/angular-local-storage.min.js")
 
-script(src="client/init.js")
-script(src="client/routes.js")
-script(src="client/user/controller.js")
+script(src="init.js")
+script(src="routes.js")
+script(src="user/controller.js")
 block js
