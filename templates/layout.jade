@@ -8,17 +8,16 @@ html(lang="ru", ng-app="client")
 
         link(rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic")
         link(rel="stylesheet" href="angular-material/angular-material.css")
-        link(rel="stylesheet" href="assets/app.css")
+        link(rel="stylesheet" href="assets/client.css")
 
-    body(layout="row" ng-controller="User as user")
+    body(layout="row")
         div(flex layout="column" tabIndex="-1")
-            md-toolbar.md-whiteframe-z1(layout="row" ng-if="user.is_logged_in()")
+            md-toolbar.md-whiteframe-z1(layout="row")
                 .md-toolbar-tools
                     span(flex)
-                    md-button(ng-click="user.logout()") Выйти
-
+                    include ../public/client/user/menu.jade
             md-content#content(flex ng-view layout="row" layout-align="center center"
-                               style="background-image:url(assets/png/city08.png); background-size: 100% auto")
+                               style="background-image:url(/assets/png/city08.png); background-size: 100% auto")
 
 // load packages
 script(src="angular/angular.js")
