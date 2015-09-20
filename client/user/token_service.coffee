@@ -12,4 +12,9 @@ class TokenService
   delete: () ->
     @localStorageService.remove(@token_key)
 
+  payload: () ->
+    token = @get()
+    payload = atob token.split('.')[1]
+    JSON.parse payload
+
 client.service 'token_service', TokenService

@@ -45,6 +45,10 @@
       return Boolean(this.token_service.get());
     };
 
+    UserController.prototype.get_id = function() {
+      return this.token_service.payload().id;
+    };
+
     return UserController;
 
   })();

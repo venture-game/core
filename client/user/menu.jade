@@ -1,10 +1,34 @@
 #user_widget(ng-controller="User as user")
 
     #logged_in(ng-if="user.is_logged_in()")
-        md-menu-divider
-        md-button(ng-click="user.logout()") Выйти
 
-    md-menu#anonymous(ng-if="!user.is_logged_in()")
+        md-icon(md-svg-icon="mdi:account" md-menu-origin style="margin-right:.3em")
+        | {{user.get_id()}}
+
+        md-menu
+
+            md-button.md-icon-button(ng-click="$mdOpenMenu()")
+                md-icon(md-svg-icon="mdi:menu")
+
+            md-menu-content(width="3")
+
+                md-menu-item
+                    md-button(ng-click="user.logout()")
+                        md-icon(md-svg-icon="mdi:clipboard-account" md-menu-align-target)
+                        | профиль
+
+                md-menu-item
+                    md-button(ng-click="user.logout()")
+                        md-icon(md-svg-icon="action:settings" md-menu-align-target)
+                        | настройки
+
+                md-menu-divider
+                md-menu-item
+                    md-button(ng-click="user.logout()")
+                        md-icon(md-svg-icon="mdi:logout" md-menu-align-target)
+                        | выйти
+
+    md-menu(ng-if="!user.is_logged_in()")
 
         md-button(ng-click="$mdOpenMenu()")
             md-icon(md-svg-icon="mdi:account-circle" md-menu-origin style="margin-right:.5em")

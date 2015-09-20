@@ -28,6 +28,10 @@ class UserController
   is_logged_in: () ->
     Boolean @token_service.get()
 
+  get_id: () ->
+    @token_service.payload().id
+
+
 
 UserController.$inject = ['user_service', 'token_service', '$location', '$mdDialog']
 

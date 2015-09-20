@@ -13,7 +13,8 @@ var client = angular.module('client', ['ngMaterial', 'ngRoute', 'LocalStorageMod
     })
     .config(function($mdThemingProvider, $mdIconProvider){
         $mdIconProvider
-            .iconSet('mdi', 'assets/svg/iconsets/mdi-icons.svg', 24);
+            .iconSet('mdi', 'assets/svg/iconsets/mdi-icons.svg', 24)
+            .iconSet('action', 'assets/svg/iconsets/action-icons.svg', 24);
 
         $mdThemingProvider.theme('default')
             .primaryPalette('blue')

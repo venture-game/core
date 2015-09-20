@@ -20,6 +20,13 @@
       return this.localStorageService.remove(this.token_key);
     };
 
+    TokenService.prototype.payload = function() {
+      var payload, token;
+      token = this.get();
+      payload = atob(token.split('.')[1]);
+      return JSON.parse(payload);
+    };
+
     return TokenService;
 
   })();
