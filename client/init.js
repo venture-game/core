@@ -3,7 +3,6 @@
 var client = angular.module('client', ['ngMaterial', 'ngRoute', 'LocalStorageModule'])
     .factory('authInterceptor', authInterceptor)
     .service('user_service', userService)
-    .service('auth', authService)
     .constant('ACCOUNT_SERVICE', 'http://localhost:3001/account')
     .config(function($httpProvider) {
         $httpProvider.interceptors.push('authInterceptor');
@@ -24,12 +23,12 @@ var client = angular.module('client', ['ngMaterial', 'ngRoute', 'LocalStorageMod
 
 
 
-function authInterceptor(ACCOUNT_SERVICE, auth) {
+function authInterceptor(ACCOUNT_SERVICE, token_service) {
 
     return {
         // automatically attach Authorization header
         request: function(config) {
-            var token = auth.get_token();
+            var token = token_service.get();
             if(config.url.indexOf(ACCOUNT_SERVICE) === 0 && token) {
                 config.headers.Authorization = 'Bearer ' + token;
             }
@@ -39,31 +38,14 @@ function authInterceptor(ACCOUNT_SERVICE, auth) {
         // If a token was sent back, save it
         response: function(res) {
             if(res.config.url.indexOf(ACCOUNT_SERVICE) === 0 && res.data.token) {
-                auth.saveToken(res.data.token);
+                token_service.save(res.data.token);
             }
             return res;
         }
     }
 }
 
-function authService(localStorageService) {
-    var self = this,
-        token_key = 'token';
-
-    self.saveToken = function(token) {
-        localStorageService.set(token_key, token);
-    };
-
-    self.get_token = function() {
-        return localStorageService.get(token_key);
-    };
-
-    self.deleteToken = function() {
-        localStorageService.remove(token_key);
-    };
-}
-
-function userService($http, ACCOUNT_SERVICE, auth) {
+function userService($http, ACCOUNT_SERVICE) {
     var self = this;
 
     self.register = function(email, password) {

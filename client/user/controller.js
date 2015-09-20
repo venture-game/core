@@ -3,9 +3,9 @@
   var UserController;
 
   UserController = (function() {
-    function UserController(user_service, auth, $location, $mdDialog) {
+    function UserController(user_service, token_service, $location, $mdDialog) {
       this.user_service = user_service;
-      this.auth = auth;
+      this.token_service = token_service;
       this.$location = $location;
       this.$mdDialog = $mdDialog;
     }
@@ -36,26 +36,20 @@
     };
 
     UserController.prototype.logout = function() {
-      this.auth.deleteToken();
+      this.token_service["delete"]();
       socket.emit('user logged out');
       return this.$location.path('/login');
     };
 
     UserController.prototype.is_logged_in = function() {
-      return Boolean(this.auth.get_token());
-    };
-
-    UserController.prototype.open_menu = function($mdOpenMenu, ev) {
-      var originatorEv;
-      originatorEv = ev;
-      return $mdOpenMenu(ev);
+      return Boolean(this.token_service.get());
     };
 
     return UserController;
 
   })();
 
-  UserController.$inject = ['user_service', 'auth', '$location', '$mdDialog'];
+  UserController.$inject = ['user_service', 'token_service', '$location', '$mdDialog'];
 
   client.controller('User', UserController);
 

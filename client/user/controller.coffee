@@ -1,6 +1,6 @@
 class UserController
 
-  constructor: (@user_service, @auth, @$location, @$mdDialog) ->
+  constructor: (@user_service, @token_service, @$location, @$mdDialog) ->
 
   handle_request: (res) ->
     token = if res.data then res.data.token else null
@@ -21,17 +21,14 @@ class UserController
       .then @handle_request, @handle_request
 
   logout: () ->
-    @auth.deleteToken();
+    @token_service.delete();
     socket.emit 'user logged out'
     @$location.path '/login'
 
   is_logged_in: () ->
-    Boolean @auth.get_token()
+    Boolean @token_service.get()
 
-  open_menu: ($mdOpenMenu, ev) ->
-    originatorEv = ev
-    $mdOpenMenu ev
 
-UserController.$inject = ['user_service', 'auth', '$location', '$mdDialog']
+UserController.$inject = ['user_service', 'token_service', '$location', '$mdDialog']
 
 client.controller 'User', UserController
