@@ -1,6 +1,6 @@
 class UserController
 
-  constructor: (@user_service, @auth, @$location) ->
+  constructor: (@user_service, @auth, @$location, @$mdDialog) ->
 
   handle_request: (res) ->
     token = if res.data then res.data.token else null
@@ -28,6 +28,10 @@ class UserController
   is_logged_in: () ->
     Boolean @auth.get_token()
 
-UserController.$inject = ['user_service', 'auth', '$location']
+  open_menu: ($mdOpenMenu, ev) ->
+    originatorEv = ev
+    $mdOpenMenu ev
+
+UserController.$inject = ['user_service', 'auth', '$location', '$mdDialog']
 
 client.controller 'User', UserController

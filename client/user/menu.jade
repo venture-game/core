@@ -1,3 +1,24 @@
 #user_menu(ng-controller="User as user")
-    md-button(ng-if="user.is_logged_in()" ng-click="user.logout()") Выйти
+
+    #logged_in(ng-if="user.is_logged_in()")
+        md-menu-divider
+        md-button(ng-click="user.logout()") Выйти
+
+    md-menu#anonymous(ng-if="!user.is_logged_in()")
+
+        md-button(ng-click="$mdOpenMenu()")
+            md-icon(md-svg-icon="mdi:account-circle" md-menu-origin style="margin-right:.5em")
+            | вход
+
+        md-menu-content(width="2")
+
+            md-menu-item
+                md-button.md-primary(ng-href="#/login")
+                    md-icon(md-svg-icon="mdi:account-key" md-menu-align-target)
+                    | войти
+
+            md-menu-item
+                md-button.md-primary(ng-href="#/register")
+                    md-icon(md-svg-icon="mdi:account-plus" md-menu-align-target)
+                    | регистрация
 

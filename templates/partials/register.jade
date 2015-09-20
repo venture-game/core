@@ -1,4 +1,5 @@
-form.md-whiteframe-z2(layout-padding layout="column" style="background: #fff" ng-controller="User as user")
+form.md-whiteframe-z2(layout-padding layout="column" style="background: #fff"
+                      ng-controller="User as user")
     md-input-container
         label="Email (обязательно)"
         input(ng-model="user.email" type="email" required="true")
@@ -8,4 +9,6 @@ form.md-whiteframe-z2(layout-padding layout="column" style="background: #fff" ng
     md-input-container
         label="Имя"
         input(ng-model="user.name")
-    md-button.md-primary(md-no-ink ng-click="user.register()") Регистрация
+    md-button.md-primary(md-no-ink ng-click="user.register()")
+        md-icon(md-svg-icon="mdi:account-plus" style="margin-right:.5em")
+        | регистрация

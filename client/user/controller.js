@@ -3,10 +3,11 @@
   var UserController;
 
   UserController = (function() {
-    function UserController(user_service, auth, $location) {
+    function UserController(user_service, auth, $location, $mdDialog) {
       this.user_service = user_service;
       this.auth = auth;
       this.$location = $location;
+      this.$mdDialog = $mdDialog;
     }
 
     UserController.prototype.handle_request = function(res) {
@@ -44,11 +45,17 @@
       return Boolean(this.auth.get_token());
     };
 
+    UserController.prototype.open_menu = function($mdOpenMenu, ev) {
+      var originatorEv;
+      originatorEv = ev;
+      return $mdOpenMenu(ev);
+    };
+
     return UserController;
 
   })();
 
-  UserController.$inject = ['user_service', 'auth', '$location'];
+  UserController.$inject = ['user_service', 'auth', '$location', '$mdDialog'];
 
   client.controller('User', UserController);
 
