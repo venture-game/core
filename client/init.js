@@ -62,4 +62,8 @@ function userService($http, ACCOUNT_SERVICE) {
             password: password
         })
     };
+
+    self.get_profile = function() {
+        return $http.get(ACCOUNT_SERVICE + '/profile')
+    }
 }

@@ -3,11 +3,17 @@
   var UserController;
 
   UserController = (function() {
-    function UserController(user_service, token_service, $location, $mdDialog) {
+    function UserController(user_service, token_service, $location, $mdDialogm, $scope, ACCOUNT_SERVICE) {
       this.user_service = user_service;
       this.token_service = token_service;
       this.$location = $location;
-      this.$mdDialog = $mdDialog;
+      this.$mdDialogm = $mdDialogm;
+      this.$scope = $scope;
+      this.ACCOUNT_SERVICE = ACCOUNT_SERVICE;
+      this.$scope.profile = null;
+      if (this.is_logged_in()) {
+        this.populate_profile();
+      }
     }
 
     UserController.prototype.handle_request = function(res) {
@@ -49,11 +55,23 @@
       return this.token_service.payload().id;
     };
 
+    UserController.prototype.populate_profile = function() {
+      return this.user_service.get_profile().then((function(_this) {
+        return function(res) {
+          return _this.$scope.profile = res;
+        };
+      })(this), (function(_this) {
+        return function(res) {
+          return console.log(res);
+        };
+      })(this));
+    };
+
     return UserController;
 
   })();
 
-  UserController.$inject = ['user_service', 'token_service', '$location', '$mdDialog'];
+  UserController.$inject = ['user_service', 'token_service', '$location', '$mdDialog', '$scope', 'ACCOUNT_SERVICE'];
 
   client.controller('User', UserController);
 

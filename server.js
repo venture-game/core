@@ -29,9 +29,9 @@ io.on('connection', function(socket){
 http.listen(3000, function(){
     console.log('- SERVER listening on *:3000');
 
-    var AS = spawn('node', ['../account_service/service.js']);
-    AS.stdout.pipe(process.stdout);
-    AS.stderr.pipe(process.stderr);
+    //var AS = spawn('node', ['../account_service/service.js']);
+    //AS.stdout.pipe(process.stdout);
+    //AS.stderr.pipe(process.stderr);
 
     var MAIL = spawn('node', ['../mail_service/service.js']);
     MAIL.stdout.pipe(process.stdout);
